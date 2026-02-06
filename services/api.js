@@ -1,55 +1,49 @@
-// // services/api.js
-// import axios from "axios";
-
-// export const api = axios.create({
-//   baseURL: process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000",
-// });
-
-// // token em memória (funciona em RN e Web)
-// let memoryToken = null;
-
-// export function setApiToken(token) {
-//   memoryToken = token || null;
-
-//   if (memoryToken) {
-//     api.defaults.headers.common.Authorization = `Bearer ${memoryToken}`;
-//   } else {
-//     delete api.defaults.headers.common.Authorization;
-//   }
-// }
-
-// // Interceptor opcional: garante header se api.defaults não estiver setado
-// api.interceptors.request.use((config) => {
-//   if (!config.headers) config.headers = {};
-
-//   if (!config.headers.Authorization && memoryToken) {
-//     config.headers.Authorization = `Bearer ${memoryToken}`;
-//   }
-
-//   return config;
-// });
-
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-const api = axios.create({ baseURL: 'http://localhost:3000' });
+// ✅ Dica importante: "localhost" no celular NÃO é seu PC.
+// Use o IP da sua máquina na rede, ex: http://192.168.0.10:3000
+const api = axios.create({ baseURL: "http://192.168.0.27:3000" });
 
-// token em memória (funciona em RN e Web)
+// token em memória (rápido)
 let memoryToken = null;
 
-export function setApiToken(token) {
+export async function setApiToken(token) {
   memoryToken = token || null;
 
   if (memoryToken) {
     api.defaults.headers.common.Authorization = `Bearer ${memoryToken}`;
+    await AsyncStorage.setItem("token", memoryToken);
   } else {
     delete api.defaults.headers.common.Authorization;
+    await AsyncStorage.removeItem("token");
   }
 }
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+// opcional: carregar token salvo ao iniciar o app
+export async function loadApiToken() {
+  const token = await AsyncStorage.getItem("token");
+  if (token) {
+    memoryToken = token;
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }
+  return token;
+}
+
+api.interceptors.request.use(async (config) => {
+  // se já tem em memória, usa ele (mais rápido)
+  if (memoryToken) {
+    config.headers.Authorization = `Bearer ${memoryToken}`;
+    return config;
+  }
+
+  // senão tenta do storage
+  const token = await AsyncStorage.getItem("token");
+  if (token) {
+    memoryToken = token;
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
   return config;
 });
 

@@ -28,7 +28,6 @@ export default function Login() {
       setSubmitting(true);
       await signIn(loginValue.trim(), password);
 		console.log('logou !!!!')
-      // ✅ após login: manda pro gerenciamento (private)
       router.replace("/(private)/post/manage");
     } catch (e) {
       console.log("login error:", e);
@@ -43,8 +42,7 @@ export default function Login() {
       <Stack.Screen options={{ title: "Login" }} />
 
       <View style={styles.container}>
-        <Text style={styles.title}>Login</Text>
-        <Text style={styles.subtitle}>Acesse para criar/editar postagens.</Text>
+        <Text style={styles.title}>Login</Text>        
 
         <Text style={styles.label}>Login</Text>
         <TextInput
@@ -68,15 +66,10 @@ export default function Login() {
           <Text style={styles.btnText}>{submitting ? "Acessando..." : "Acessar"}</Text>
         </TouchableOpacity>
 
-        {/* Opcional: se quiser voltar pro feed público */}
         <TouchableOpacity onPress={() => router.replace("/(shell)")}>
           <Text style={styles.link}>Voltar para o Feed</Text>
         </TouchableOpacity>
 
-        {/* Register só se existir no backend */}
-        {/* <TouchableOpacity onPress={() => router.push("/register")}>
-          <Text style={styles.link}>Criar conta</Text>
-        </TouchableOpacity> */}
       </View>
     </>
   );
@@ -84,7 +77,7 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, justifyContent: "center" },
-  title: { fontSize: 26, fontWeight: "900", color: "#111" },
+  title: { fontSize: 32, fontWeight: "900", color: "#111", textAlign: "center", marginBottom: 30 },
   subtitle: { marginTop: 6, fontSize: 14, color: "#666", marginBottom: 18 },
 
   label: { fontSize: 12, color: "#666", fontWeight: "700", marginTop: 10 },

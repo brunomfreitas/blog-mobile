@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
 	Alert,
@@ -11,7 +11,6 @@ import {
 	View
 } from "react-native";
 import { useAuth } from "../../../auth/AuthContext";
-import { getCategories } from "../../../services/categoryService";
 import { deletePost, getAdminPosts, searchPublicPosts } from "../../../services/postsService";
 
 function normalizePost(p) {
@@ -31,37 +30,15 @@ export default function PostsManage() {
 
 	const { token } = useAuth(); // 🔐  
 
-	const [categories, setCategories] = useState([]);
-	const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-
 	const [query, setQuery] = useState("");
-	// const debounceRef = useRef(null);
 
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(true);
 
-	const [loadingCats, setLoadingCats] = useState(true);
 	const [loading, setLoading] = useState(true);
 	const [loadingMore, setLoadingMore] = useState(false);
 	const [error, setError] = useState("");
-
-	const chips = useMemo(() => {
-		const base = [{ id: null, name: "Todas" }];
-		return base.concat(categories.map((c) => ({ id: c.id, name: c.name })));
-	}, [categories]);
-
-	async function loadCategories() {
-		try {
-		setLoadingCats(true);
-		const resp = await getCategories();
-		setCategories(resp.data ?? []);
-		} catch (e) {
-		console.log("❌ Erro ao carregar categorias:", e);
-		} finally {
-		setLoadingCats(false);
-		}
-	}
 
 	async function fetchPosts({ reset = false, nextPage = 1 } = {}) {
 		try {
@@ -115,28 +92,11 @@ export default function PostsManage() {
 		}
 	}
 
-	useEffect(() => {
-		loadCategories();
-	}, []);
-
 	// Recarrega quando muda categoria (reset)
 	useEffect(() => {
 		fetchPosts({ reset: true, nextPage: 1 });
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedCategoryId]);
-
-	// // Busca com debounce
-	// useEffect(() => {
-	// 	if (debounceRef.current) clearTimeout(debounceRef.current);
-	// 	debounceRef.current = setTimeout(() => {
-	// 	fetchPosts({ reset: true, nextPage: 1 });
-	// 	}, 350);
-
-	// 	return () => {
-	// 	if (debounceRef.current) clearTimeout(debounceRef.current);
-	// 	};
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [query]);
+	}, []);
 
 	function confirmDelete(item) {		
 		// 🌐 WEB
@@ -180,21 +140,6 @@ export default function PostsManage() {
 			Alert.alert?.("Erro", "Não foi possível excluir a postagem.");
 		}
 	}
-
-	const renderChip = (chip) => {
-		const active = selectedCategoryId === chip.id;
-		return (
-		<TouchableOpacity
-			key={String(chip.id)}
-			onPress={() => setSelectedCategoryId(chip.id)}
-			style={[styles.chip, active && styles.chipActive]}
-		>
-			<Text style={[styles.chipText, active && styles.chipTextActive]}>
-			{chip.name}
-			</Text>
-		</TouchableOpacity>
-		);
-	};
 
 	const renderItem = ({ item }) => {
 		return (
@@ -254,24 +199,6 @@ export default function PostsManage() {
 			>
 			<Text style={styles.newBtnText}>+ Novo</Text>
 			</TouchableOpacity>
-		</View>
-
-		{/* Categories */}
-		<View style={styles.chipsRow}>
-			{loadingCats ? (
-			<View style={{ paddingVertical: 6 }}>
-				<ActivityIndicator />
-			</View>
-			) : (
-			<FlatList
-				data={chips}
-				keyExtractor={(it) => String(it.id)}
-				renderItem={({ item }) => renderChip(item)}
-				horizontal
-				showsHorizontalScrollIndicator={false}
-				contentContainerStyle={{ gap: 8, paddingHorizontal: 16 }}
-			/>
-			)}
 		</View>
 
 		{/* Content */}
