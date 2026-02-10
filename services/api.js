@@ -3,7 +3,7 @@ import axios from "axios";
 
 // ✅ Dica importante: "localhost" no celular NÃO é seu PC.
 // Use o IP da sua máquina na rede, ex: http://192.168.0.10:3000
-const api = axios.create({ baseURL: "http://192.168.0.27:3000" });
+const api = axios.create({ baseURL: "http://192.168.0.9:3000" });
 
 // token em memória (rápido)
 let memoryToken = null;

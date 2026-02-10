@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    volumes:
+      - blog_pg_data:/var/lib/postgresql/data	  
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    networks:
+      - blog-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U blog_user -d blog"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    image: brunomfreitas/blog-backend:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_NAME: blog
+      DATABASE_USER: blog_user
+      DATABASE_PASSWORD: blog_password
+      DATABASE_PORT: 5432
+      JWT_SECRET: e14ec713-b091-47d2-a649-f9b085ab9c6f
+      JWT_EXPIRES_IN: 1d
+      NODE_ENV: production
+    networks:
+      - blog-network
+
+networks:
+  blog-network:
+    driver: bridge
+
+volumes:
+  blog_pg_data:

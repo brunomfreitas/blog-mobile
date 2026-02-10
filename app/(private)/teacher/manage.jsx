@@ -11,17 +11,16 @@ import {
 	TouchableOpacity,
 	View,
 } from "react-native";
-
 import { useAuth } from "../../../auth/AuthContext";
 import { deletePerson, getTeachers, searchTeachers } from "../../../services/personService";
-import { formatDateBR } from "../../../utils/date";
+import { brToIso, isoToBr } from "../../../utils/date";
 
 function normalizeTeacher(t) {
   return {
     id: String(t?.id ?? ""),
     name: t?.name ?? "Sem nome",
     cpf: t?.cpf ?? "",
-    birth: t?.birth ? formatDateBR(t?.birth) : "",
+    birth: t?.birth ? isoToBr(t?.birth) : "",
     email: t?.email ?? "",
 	type_person: t?.type_person ?? "P",
     status: Boolean(t?.status),
@@ -29,14 +28,12 @@ function normalizeTeacher(t) {
 }
 
 export default function TeachersManage() {
-  const { token } = useAuth();
+  
+	const { token } = useAuth();
+	const [query, setQuery] = useState("");
+	const [items, setItems] = useState([]);
+	const [loading, setLoading] = useState(true);
 
-  const [query, setQuery] = useState("");
-
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // ✅ AGORA EXISTE
   async function fetchTeachers() {
     try {
       setLoading(true);
@@ -86,12 +83,13 @@ export default function TeachersManage() {
 
   async function handleDelete(item) {
     try {
-      await deletePerson(item.id, item, token);
-      setItems((prev) => prev.filter((t) => t.id !== item.id));
-      Alert.alert("Sucesso", "Professor excluído!");
+		item.birth = brToIso(item.birth);
+      	await deletePerson(item.id, item, token);
+      	setItems((prev) => prev.filter((t) => t.id !== item.id));
+      	Alert.alert("Sucesso", "Professor excluído!");
     } catch (e) {
-      console.log("❌ Erro ao excluir professor:", e);
-      Alert.alert("Erro", "Não foi possível excluir.");
+      	console.log("❌ Erro ao excluir professor:", e);
+      	Alert.alert("Erro", "Não foi possível excluir.");
     }
   }
 

@@ -13,14 +13,14 @@ import {
 } from "react-native";
 import { useAuth } from "../../../auth/AuthContext";
 import { deletePerson, getStudents, searchStudents } from "../../../services/personService";
-import { formatDateBR } from "../../../utils/date";
+import { brToIso, isoToBr } from "../../../utils/date";
 
 function normalizeStudent(t) {
   return {
     id: String(t?.id ?? ""),
     name: t?.name ?? "Sem nome",
     cpf: t?.cpf ?? "",
-	birth: t?.birth ? formatDateBR(t?.birth) : "",
+	birth: t?.birth ? isoToBr(t?.birth) : "",
     email: t?.email ?? "",
 	type_person: t?.type_person ?? "A",
     status: Boolean(t?.status),
@@ -28,13 +28,11 @@ function normalizeStudent(t) {
 }
 
 export default function StudentsManage() {
-  const { token } = useAuth();
-
-  const [query, setQuery] = useState("");
-
-  const [items, setItems] = useState([]);
-
-  const [loading, setLoading] = useState(true);
+  
+	const { token } = useAuth();
+	const [query, setQuery] = useState("");
+	const [items, setItems] = useState([]);
+	const [loading, setLoading] = useState(true);
 
   async function fetchStudents() {
     try {
@@ -85,6 +83,9 @@ export default function StudentsManage() {
   }
 
   async function handleDelete(item) {
+
+	item.birth = brToIso(item.birth);
+
     try {
       await deletePerson(item.id, item, token);
       setItems((prev) => prev.filter((t) => t.id !== item.id));
@@ -102,7 +103,7 @@ export default function StudentsManage() {
         <Text style={styles.meta} numberOfLines={1}>
           {item.cpf ? `CPF: ${item.cpf} • ` : ""}{item.email || "—"}
         </Text>
-        {!!item.birth && <Text style={styles.meta}>Nasc.: {item.birth}</Text>}
+        {!!item.birth && <Text style={styles.meta}>Nasc.: {(item.birth)}</Text>}
       </View>
 
       <View style={styles.actions}>
