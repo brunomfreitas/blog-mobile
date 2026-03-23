@@ -21,6 +21,12 @@ INSERT INTO BLOG.PERSON (NAME, CPF, BIRTH, EMAIL, STATUS, TYPE_PERSON) VALUES ('
 INSERT INTO BLOG.USER (LOGIN, PASSWORD, STATUS, ID_PERSON) VALUES ('joao', '$2b$10$8MUDPrLSR4VB/Kvxz39bUuG0OhdHeiQHKIEM4CGBSNtqbs7M6QndW', true, 1);
 INSERT INTO BLOG.USER (LOGIN, PASSWORD, STATUS, ID_PERSON) VALUES ('maria', '$2b$10$knhaJjnFXTOP3fdrOdj40O/BwKrE3I7sV.dMJPisCA6NgsrPvicUS', true, 2);
 
+--select * from CATEGORY;
+--select * from POST_STATUS;
+--select * from person;
+--select * from USER;
+--select * from post;
+
 -- CARGA DE POSTAGEM
 INSERT INTO blog.post (title, subtitle, message, image, createdat, createdby, postedat, postedby, category, post_status) VALUES
 ('Globalização e seus impactos no mundo atual', 'Entenda como a globalização influencia a economia, a cultura e as relações entre os países', 'A globalização é um processo caracterizado pela intensificação das relações econômicas, culturais e sociais entre os países. Com o avanço dos meios de transporte e comunicação, o mundo tornou-se mais conectado, facilitando o fluxo de informações, mercadorias e pessoas.
@@ -70,3 +76,6 @@ INSERT INTO blog.post (title, subtitle, message, image, createdat, createdby, po
 O assassinato do arquiduque Francisco Ferdinando, herdeiro do Império Austro-Húngaro, foi o estopim para o início da guerra, mas as tensões já vinham se acumulando há décadas. O conflito envolveu diversos países e resultou em milhões de mortos, além de profundas transformações políticas e territoriais.
 
 Estudar a Primeira Guerra Mundial permite ao estudante compreender como rivalidades internacionais podem gerar grandes conflitos e refletir sobre a importância do diálogo e da diplomacia para a manutenção da paz.', NULL, '2025-12-22 23:23:24.966', 1, '2025-12-10 20:52:00.000', 1, 4, 7);
+
+--INSERT INTO blog.questao (enunciado, resposta, escolaridade, turno, periodo, tipo_questao, category, createdby, status) VALUES
+--('Observe o texto a seguir. \nÀ Beça\nGumercindo Bessa (1859-1913), jornalista e jurista alagoano, foi adversário de Rui Barbosa na Questão Acreana, em que o Estado do Amazonas pretendia incorporar o Território do Acre. Bessa venceu a questão em favor do Acre, apresentando argumentos irrefutáveis e numa quantidade impressionante. Posteriormente, mas não muito, Rodrigues Alves (Presidente do Brasil de 1902 a 1906) diria a um cidadão que lhe apresentava um pedido com justificativas infindáveis: O senhor tem argumentos à Bessa. A partir daí, popularizou-se a expressão à beça com o sentido de uma grande quantidade ou intensidade. Por que os dois esses viraram cê-cedilha? Ninguém sabe.\n(Reinaldo Pimenta, A Casa da Mãe Joana 2)\n A ideia central do texto é a de','B',1,1,1,1,1,1,true);

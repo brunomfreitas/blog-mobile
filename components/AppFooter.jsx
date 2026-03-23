@@ -21,7 +21,8 @@ export default function AppFooter() {
        {/* Só aparece se estiver logado */}
       {isAuthenticated && (
 		<>
-        	<Item label="Admin" href="/(private)/post/manage" />
+        	<Item label="Postagens" href="/(private)/post/manage" />
+			<Item label="Banco de Questões" href="/(private)/questao/manage" />
 			<Item label="Professor" href="/(private)/teacher/manage" />
 			<Item label="Aluno" href="/(private)/student/manage" />
 		</>
