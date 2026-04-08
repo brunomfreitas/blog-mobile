@@ -107,7 +107,7 @@ export default function QuestaoManage() {
 		// 🌐 WEB
 		if (Platform.OS === "web") {
 			const ok = window.confirm(
-			`Tem certeza que deseja excluir:\n\n"${item.title}"?`
+			`Tem certeza que deseja excluir:\n\n"${item.enunciado}"?`
 			);
 
 			if (!ok) return;
@@ -119,7 +119,7 @@ export default function QuestaoManage() {
 		// 📱 ANDROID / IOS
 		Alert.alert(
 			"Excluir postagem",
-			`Tem certeza que deseja excluir:\n\n"${item.title}"?`,
+			`Tem certeza que deseja excluir:\n\n"${item.enunciado}"?`,
 			[
 			{ text: "Cancelar", style: "cancel" },
 			{
@@ -170,7 +170,7 @@ export default function QuestaoManage() {
 			<View style={styles.actions}>
 			<TouchableOpacity
 				style={[styles.btn, styles.btnGhost]}
-				onPress={() => router.push(`/(shell)/questao/${item.id}`)}
+				onPress={() => router.push(`/(private)/questao/view/${item.id}`)}
 			>
 				<Text style={styles.btnGhostText}>Ver</Text>
 			</TouchableOpacity>

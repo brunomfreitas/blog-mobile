@@ -1,8 +1,8 @@
-const tipoQuestao =
+const tipoQuestoes =
   [
-    { id: 1, nome: 'prova' },
-	{ id: 2, nome: 'exercicio' },
-	{ id: 3, nome: 'desafio' }	
+    { id: 1, nome: 'Prova' },
+	{ id: 2, nome: 'Exercicio' },
+	{ id: 3, nome: 'Desafio' }	
   ];
 
-export default tipoQuestao;
+export default tipoQuestoes;

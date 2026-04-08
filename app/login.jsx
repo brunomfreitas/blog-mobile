@@ -28,7 +28,7 @@ export default function Login() {
       setSubmitting(true);
       await signIn(loginValue.trim(), password);
 		console.log('logou !!!!')
-      router.replace("/(private)/post/manage");
+      router.replace("/(shell)");
     } catch (e) {
       console.log("login error:", e);
       Alert.alert("Erro", "Login inválido ou erro ao autenticar.");

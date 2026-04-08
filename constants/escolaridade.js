@@ -1,4 +1,4 @@
-const escolaridade =
+const escolaridades =
   [
     { id: 1, nome: '1ª Série' },
 	{ id: 2, nome: '2ª Série' },
@@ -11,4 +11,4 @@ const escolaridade =
 	{ id: 9, nome: '9ª Série' }
   ];
 
-export default escolaridade;
+export default escolaridades;
